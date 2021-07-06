@@ -1,0 +1,203 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/fnt/Roboto_28.tres" type="DynamicFont" id=1]
+[ext_resource path="res://scenes/main.gd" type="Script" id=2]
+[ext_resource path="res://assets/fnt/Roboto_48.tres" type="DynamicFont" id=3]
+[ext_resource path="res://scenes/end_task_popup.tscn" type="PackedScene" id=4]
+
+[node name="main" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 0.0, 400.0 ],
+"_edit_use_anchors_": false,
+"_edit_vertical_guides_": [ 0.0, 720.0 ]
+}
+
+[node name="round" type="Label" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 239.0
+margin_bottom = 67.0
+custom_fonts/font = ExtResource( 3 )
+text = "Round 999"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="timer" type="Label" parent="."]
+anchor_left = 0.781944
+anchor_top = 0.025
+anchor_right = 0.986111
+anchor_bottom = 0.1675
+custom_fonts/font = ExtResource( 3 )
+text = "999:59"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="break_text" type="Label" parent="."]
+anchor_left = 0.55
+anchor_top = 0.025
+anchor_right = 0.755555
+anchor_bottom = 0.1675
+margin_right = 0.00012207
+margin_bottom = 7.62939e-06
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+text = "BREAK"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="pause_text" type="Label" parent="."]
+anchor_left = 0.738889
+anchor_top = 0.15
+anchor_right = 0.986111
+anchor_bottom = 0.2925
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 1, 1, 0, 1 )
+text = "PAUSED"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="task_name_lbl" type="Label" parent="."]
+margin_left = 50.0
+margin_top = 217.0
+margin_right = 194.0
+margin_bottom = 250.0
+custom_fonts/font = ExtResource( 1 )
+text = "Task name:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="task_name" type="LineEdit" parent="."]
+margin_left = 200.0
+margin_top = 207.0
+margin_right = 497.0
+margin_bottom = 250.0
+custom_fonts/font = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="working_time_lbl" type="Label" parent="."]
+margin_left = 50.0
+margin_top = 267.0
+margin_right = 222.0
+margin_bottom = 300.0
+custom_fonts/font = ExtResource( 1 )
+text = "Working time:"
+
+[node name="wd" type="Button" parent="."]
+margin_left = 250.0
+margin_top = 261.0
+margin_right = 276.0
+margin_bottom = 300.0
+custom_fonts/font = ExtResource( 1 )
+text = "<"
+
+[node name="task_working_time" type="LineEdit" parent="."]
+margin_left = 285.0
+margin_top = 257.0
+margin_right = 379.0
+margin_bottom = 300.0
+custom_fonts/font = ExtResource( 1 )
+align = 1
+editable = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="wi" type="Button" parent="."]
+margin_left = 388.0
+margin_top = 261.0
+margin_right = 415.0
+margin_bottom = 300.0
+custom_fonts/font = ExtResource( 1 )
+text = ">"
+
+[node name="break_time_lbl" type="Label" parent="."]
+margin_left = 50.0
+margin_top = 317.0
+margin_right = 222.0
+margin_bottom = 350.0
+custom_fonts/font = ExtResource( 1 )
+text = "Break time:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="bd" type="Button" parent="."]
+margin_left = 250.0
+margin_top = 311.0
+margin_right = 276.0
+margin_bottom = 350.0
+custom_fonts/font = ExtResource( 1 )
+text = "<"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="task_break_time" type="LineEdit" parent="."]
+margin_left = 285.0
+margin_top = 307.0
+margin_right = 379.0
+margin_bottom = 350.0
+custom_fonts/font = ExtResource( 1 )
+align = 1
+editable = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="bi" type="Button" parent="."]
+margin_left = 388.0
+margin_top = 311.0
+margin_right = 415.0
+margin_bottom = 350.0
+custom_fonts/font = ExtResource( 1 )
+text = ">"
+
+[node name="start_task_btn" type="Button" parent="."]
+margin_left = 520.0
+margin_top = 211.0
+margin_right = 700.0
+margin_bottom = 250.0
+custom_fonts/font = ExtResource( 1 )
+text = "Start task"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="pause_task_btn" type="Button" parent="."]
+margin_left = 520.0
+margin_top = 261.0
+margin_right = 700.0
+margin_bottom = 300.0
+custom_fonts/font = ExtResource( 1 )
+text = "Unpause task"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="end_task_btn" type="Button" parent="."]
+margin_left = 520.0
+margin_top = 311.0
+margin_right = 700.0
+margin_bottom = 350.0
+custom_fonts/font = ExtResource( 1 )
+text = "End task"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sound" type="AudioStreamPlayer2D" parent="."]
+
+[node name="end_task_popup" parent="." instance=ExtResource( 4 )]
