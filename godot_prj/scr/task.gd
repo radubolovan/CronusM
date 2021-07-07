@@ -34,6 +34,15 @@ func serialize():
 	json += "\"rounds_count\":\"" + str(m_rounds_count) + "\","
 	json += "\"status\":\"" + str(m_status) + "\""
 	json += "}"
+	return json
 
 func deserialize(task_data):
-	pass
+	m_task_name = task_data["name"]
+	m_start_time = task_data["start_time"].to_int()
+	m_round_time = task_data["round_time"].to_int()
+	m_break_time = task_data["break_time"].to_int()
+	m_rounds_count = task_data["rounds_count"].to_int()
+	m_status = task_data["status"].to_int()
+
+	var dict = OS.get_datetime_from_unix_time(m_start_time)
+	print(dict)

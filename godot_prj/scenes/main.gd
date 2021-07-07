@@ -25,13 +25,7 @@ var m_working_round_count = 0
 
 var m_task_is_paused = false
 
-enum TimeFormat {
-	FORMAT_HOURS   = 1 << 0,
-	FORMAT_MINUTES = 1 << 1,
-	FORMAT_SECONDS = 1 << 2,
-	FORMAT_DEFAULT = 1 << 0 | 1 << 1 | 1 << 2
-	#FORMAT_DEFAULT = TimeFormat.FORMAT_HOURS | TimeFormat.FORMAT_MINUTES | TimeFormat.FORMAT_SECONDS
-}
+var m_tasks = []
 
 enum e_sfx_type{
 	start_working = 0,
@@ -77,6 +71,8 @@ const c_task_snd = [
 
 func _ready():
 	randomize()
+
+	read_tasks()
 
 	m_task_working_time = c_start_task_working_time
 	update_task_working_time()
@@ -138,14 +134,14 @@ func _process(delta):
 	if(m_task_working_started):
 		m_task_working_timer += delta
 		var time_left = m_task_working_time * 60.0 - m_task_working_timer
-		$timer.text = format_time(time_left, TimeFormat.FORMAT_MINUTES | TimeFormat.FORMAT_SECONDS)
+		$timer.text = g_globals.format_time(time_left, g_globals.TimeFormat.FORMAT_MINUTES | g_globals.TimeFormat.FORMAT_SECONDS)
 		if(m_task_working_timer >= m_task_working_time * 60.0):
 			on_task_start_break()
 
 	if(m_task_break_started):
 		m_task_break_timer += delta
 		var time_left = m_task_break_time * 60.0 - m_task_break_timer
-		$timer.text = format_time(time_left, TimeFormat.FORMAT_MINUTES | TimeFormat.FORMAT_SECONDS)
+		$timer.text = g_globals.format_time(time_left, g_globals.TimeFormat.FORMAT_MINUTES | g_globals.TimeFormat.FORMAT_SECONDS)
 		if(m_task_break_timer >= m_task_break_time * 60.0):
 			continue_task()
 
@@ -207,6 +203,13 @@ func enable_buttons(enable : bool):
 	$end_task_btn.disabled = enable
 
 func on_task_start_working():
+	#start(task_name, start_timestamp, round_time, break_time)
+	var task = CMTask.new()
+	task.start($task_name.text, OS.get_system_time_secs(), m_task_working_time, m_task_break_time)
+	m_tasks.push_back(task)
+
+	save_tasks()
+
 	m_working_round_count = 1
 	m_task_working_timer = 0.0
 	m_task_working_started = true
@@ -264,35 +267,34 @@ func on_close_end_task_popup():
 	$end_task_popup.visible = false
 	initialize()
 
-func write_task_to_file():
-	pass
+func save_tasks():
+	var tasks_count = m_tasks.size()
+	var tasks_data = "{\n\t\"tasks\":["
+	for idx in range(0, tasks_count):
+		tasks_data += "\n" + m_tasks[idx].serialize()
+		if(idx < tasks_count - 1):
+			tasks_data += ","
+	tasks_data += "\n\t]\n}"
 
-"""
-Credits for this function goes to: https://godotengine.org/qa/32785/is-there-simple-way-to-convert-seconds-to-hh-mm-ss-format-godot
-OBS: my version is modified in order to fix a few bugs
-"""
-func format_time(time, format = TimeFormat.FORMAT_DEFAULT, digit_format = "%02d"):
-	var digits = []
+	var f = File.new()
+	f.open(g_constants.c_tasks_filepath, File.WRITE)
+	f.store_string(tasks_data)
+	f.close()
 
-	if format & TimeFormat.FORMAT_HOURS:
-		var hours = digit_format % [int(ceil(time)) / 3600]
-		digits.append(hours)
+func read_tasks():
+	var f = File.new()
+	if(!f.file_exists(g_constants.c_tasks_filepath)):
+		return
+	f.open(g_constants.c_tasks_filepath, File.READ)
+	var tasks_text = f.get_as_text()
+	f.close()
 
-	if format & TimeFormat.FORMAT_MINUTES:
-		var minutes = digit_format % [int(ceil(time)) / 60]
-		digits.append(minutes)
+	m_tasks.clear()
 
-	if format & TimeFormat.FORMAT_SECONDS:
-		var seconds = digit_format % [int(ceil(time)) % 60]
-		digits.append(seconds)
+	var tasks_json = JSON.parse(tasks_text).result
+	var tasks_data = tasks_json["tasks"]
+	for idx in range(0, tasks_data.size()):
+		var task = CMTask.new()
+		task.deserialize(tasks_data[idx])
+		m_tasks.push_back(task)
 
-	var formatted = String()
-	var colon = ":"
-
-	for digit in digits:
-		formatted += digit + colon
-
-	if not formatted.empty():
-		formatted = formatted.rstrip(colon)
-
-	return formatted

@@ -24,6 +24,11 @@ config/name="CronusM"
 run/main_scene="res://scenes/main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+g_constants="*res://scr/constants.gd"
+g_globals="*res://scr/globals.gd"
+
 [debug]
 
 gdscript/warnings/enable=false
