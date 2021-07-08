@@ -21,3 +21,14 @@ July 6th, 2021:
 	- work time: (1 + 1 + 1 + 1) x (25 minutes) = 100 minutes
 	- break time: (1 + 1 + 1) x (5 minutes) = 15 minutes
 	- total time: 115 minutes
+
+July 7th, 2021:
+
+	- work time: (1 + 1) x (25 minutes) = 50 minutes
+	- break time: (1) x (5 minutes) = 5 minutes
+	- total time: 55 minutes
+
+July 8th, 2021:
+	- work time: (1 + 1 + 1) x (25 minutes)
+	- break time: (1 + 1) x (5 minutes)
+	- total time: 85 minutes

@@ -26,6 +26,7 @@ var m_working_round_count = 0
 var m_task_is_paused = false
 
 var m_tasks = []
+var m_current_task_idx = -1
 
 enum e_sfx_type{
 	start_working = 0,
@@ -90,16 +91,12 @@ func _ready():
 	$pause_task_btn.connect("pressed", self, "on_pause_task")
 	$end_task_btn.connect("pressed", self, "on_end_task")
 
+	$all_tasks_btn.connect("pressed", self, "on_view_tasks_btn_pressed")
+
 	$end_task_popup.visible = false
 	$end_task_popup.connect("close", self, "on_close_end_task_popup")
 
 	initialize()
-
-func read_savefile():
-	var f = File.new()
-	var err = f.open(c_tasks_save_filepath, File.READ)
-	if(err != OK):
-		return
 
 func initialize():
 	$round.text = "Task not started"
@@ -126,6 +123,9 @@ func initialize():
 	m_task_is_paused = false
 
 	enable_buttons(true)
+
+	$tasks_UI.visible = false
+	$tasks_UI.connect("close", self, "on_hide_tasks")
 
 func _process(delta):
 	if(m_task_is_paused):
@@ -203,11 +203,11 @@ func enable_buttons(enable : bool):
 	$end_task_btn.disabled = enable
 
 func on_task_start_working():
-	#start(task_name, start_timestamp, round_time, break_time)
 	var task = CMTask.new()
-	task.start($task_name.text, OS.get_system_time_secs(), m_task_working_time, m_task_break_time)
+	task.start($task_name.text, OS.get_unix_time_from_datetime(OS.get_datetime()), m_task_working_time, m_task_break_time)
 	m_tasks.push_back(task)
 
+	m_current_task_idx = m_tasks.size() - 1
 	save_tasks()
 
 	m_working_round_count = 1
@@ -230,6 +230,8 @@ func continue_task():
 	$round.text = "Round: " + str(m_working_round_count)
 	$break_text.visible = false
 	play_sound(e_sfx_type.start_working)
+	m_tasks[m_current_task_idx].add_round()
+	save_tasks()
 
 func on_task_start_break():
 	m_task_break_timer = 0.0
@@ -253,6 +255,8 @@ func on_end_task():
 	play_sound(e_sfx_type.task_done)
 	$end_task_popup.setup(m_working_round_count, m_task_working_time, m_task_break_time)
 	$end_task_popup.visible = true
+	m_tasks[m_current_task_idx].end_task()
+	save_tasks()
 
 func play_sound(sfx_type):
 	$sound.stream = get_sound(sfx_type)
@@ -266,6 +270,13 @@ func get_sound(sfx_type):
 func on_close_end_task_popup():
 	$end_task_popup.visible = false
 	initialize()
+
+func on_view_tasks_btn_pressed():
+	$tasks_UI.initialize(m_tasks)
+	$tasks_UI.visible = true
+
+func on_hide_tasks():
+	$tasks_UI.visible = false
 
 func save_tasks():
 	var tasks_count = m_tasks.size()

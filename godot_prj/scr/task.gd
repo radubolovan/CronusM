@@ -25,6 +25,9 @@ func start(task_name, start_timestamp, round_time, break_time):
 func add_round():
 	m_rounds_count += 1
 
+func end_task():
+	m_status = TaskStatus.e_task_status_finished
+
 func serialize():
 	var json = "\t\t{"
 	json += "\"name\":\"" + m_task_name + "\","
@@ -44,5 +47,11 @@ func deserialize(task_data):
 	m_rounds_count = task_data["rounds_count"].to_int()
 	m_status = task_data["status"].to_int()
 
-	var dict = OS.get_datetime_from_unix_time(m_start_time)
-	print(dict)
+	#var dict = OS.get_datetime_from_unix_time(m_start_time)
+	#print(dict)
+
+func get_task_name():
+	match m_status:
+		TaskStatus.e_task_status_WIP: return "WIP"
+		TaskStatus.e_task_status_finished: return "Finished"
+	return "Wnknown task status type"

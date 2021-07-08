@@ -37,3 +37,26 @@ func format_time(time, format = TimeFormat.FORMAT_DEFAULT, digit_format = "%02d"
 		formatted = formatted.rstrip(colon)
 
 	return formatted
+
+func get_month_name(month):
+	match month:
+		1: return "January"
+		2: return "February"
+		3: return "March"
+		4: return "April"
+		5: return "May"
+		6: return "June"
+		7: return "July"
+		8: return "August"
+		9: return "September"
+		10: return "October"
+		11: return "November"
+		12: return "December"
+	return "Unknown month: " + str(month)
+
+func get_day_name(day):
+	match day:
+		1: return "1st"
+		2: return "2nd"
+		3: return "3rd"
+	return str(day) + "th"
